@@ -43,6 +43,7 @@ class Dataset:
         self.adj_evolve = []
         self.edges = []
         self.edges_evolve = []
+        self.degree = []
 
     def _read_feature(self):
         filename = osp.join(self.root, self.name, f"{self.name}.npy")
@@ -166,6 +167,7 @@ class DBLP(Dataset):
         self.adj_evolve = [edges_to_adj(edge, num_nodes=self.num_nodes) for edge in edges_evolve]
         self.edges = [torch.LongTensor(edge) for edge in edges]
         self.edges_evolve = edges_evolve  # list of np.ndarray, the edges in each timestamp exist separately
+        self.degree = [np.array(adj.sum(1)).flatten().astype(int) for adj in self.adj]
 
         self.y = torch.LongTensor(y)
 
